@@ -72,6 +72,13 @@ var payWithCard = function(stripe, card, clientSecret) {
         // network between your server and stripe API endpoint
         // system error at stripe
         // timeout/system experienced at stripe due to third party issues
+        
+        // and delete sessions
+
+        console.log('clearing transaction session')
+        fetch('/s/clear_cart_transaction');
+
+
 
       } else {
         // The payment succeeded!
