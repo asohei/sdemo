@@ -66,6 +66,13 @@ var payWithCard = function(stripe, card, clientSecret) {
       if (result.error) {
         // Show error to your customer
         showError(result.error.message);
+        
+        // Write this failure instance to recovery queue DB along with paymentIntent ID
+        // you need to clear unintended payment which may have been created during issues such as 
+        // network between your server and stripe API endpoint
+        // system error at stripe
+        // timeout/system experienced at stripe due to third party issues
+
       } else {
         // The payment succeeded!
         orderComplete(result.paymentIntent.id, result.paymentIntent.amount);
