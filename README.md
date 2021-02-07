@@ -1,45 +1,22 @@
-# Python: Getting Started
-
-A barebones Django app, which can easily be deployed to Heroku.
-
-This application supports the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.
+# Stripe: Getting Started with sample demo application
 
 ## Running Locally
 
-Make sure you have Python 3.7 [installed locally](http://install.python-guide.org). To push to Heroku, you'll need to install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli), as well as [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup).
+Make sure you have Python 3 [installed locally](http://install.python-guide.org). To push to Heroku, you'll need to install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli), as well as [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup).
 
 ```sh
-$ git clone https://github.com/heroku/python-getting-started.git
-$ cd python-getting-started
+$ git clone https://github.com/asohei/sdemo.git
+$ cd sdemo
 
-$ python3 -m venv getting-started
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 
-$ createdb python_getting_started
+$ python3 manage.py migrate
 
-$ python manage.py migrate
-$ python manage.py collectstatic
+$ touch .env
 
-$ heroku local
-```
+add your stripe api keys
 
-Your app should now be running on [localhost:5000](http://localhost:5000/).
+    s_public_key = pk_test_XXXXX
+    s_api_secret = sk_test_XXXXX
 
-## Deploying to Heroku
-
-```sh
-$ heroku create
-$ git push heroku master
-
-$ heroku run python manage.py migrate
-$ heroku open
-```
-or
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-## Documentation
-
-For more information about using Python on Heroku, see these Dev Center articles:
-
-- [Python on Heroku](https://devcenter.heroku.com/categories/python)
+$ python3 manage.py runserver

@@ -18,13 +18,6 @@ login_user = 'user_123'
 user_cart = login_user + '_cart'
 
 
-def checkout(request):
-    context = {
-    #     'client_token': get_client_token(),
-    #     'client_id' : client_id
-        }
-    return render(request, 's/index.html', context)
-
 @csrf_exempt
 def add_to_cart(request):
 
@@ -209,40 +202,7 @@ def create_checkout_session(self):
     except Exception as e:
         return HttpResponse(e)
 
-def custom(request):
-    context = {
-    #     'client_token': get_client_token(),
-    #     'client_id' : client_id
-        }
-    return render(request, 's/custom.html', context)
 
-def custom5(request):
-    context = {
-    #     'client_token': get_client_token(),
-    #     'client_id' : client_id
-        }
-    return render(request, 's/custom5.html', context)
-
-
-@csrf_exempt
-def create_payment(request):
-
-    try:
-        data = json.loads(request.body)
-        intent = stripe.PaymentIntent.create(
-            amount=999,
-            currency='JPY',
-            payment_method_types=["card","alipay"]
-        )
-
-        res = {
-            'clientSecret' : intent['client_secret']
-        }
-
-        return JsonResponse(res)
-
-    except Exception as e:
-        return HttpResponse(e) 
 
 @csrf_exempt
 def charge_token(request):
