@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Accept a card payment</title>
+    <meta name="description" content="A demo of a card payment on Stripe" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+        var s_public_key = "{{s_public_key}}"
+    </script>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 's/global.css' %}" />
+    <script src="{% static 's/client_custom.js' %}" defer></script>
+
+<script>
+
+        function grabCart(index){
+    
+
+        const uri = `/s/grab_cart`
+            
+            return fetch(uri, {
+                method: "GET",
+            }).then(items=>{
+            return items.json()
+        }).then(items => {
+        
+                document.getElementById('items').innerHTML = drawCart(items);
+            
+            })
+
+            };
+
+
+    function checkPaymentIntent(){
+
+        error_message = "{{error}}"
+        
+        if (error_message.length > 0){
+
+
+            _html = "We are currently having issue accepting payment.<br>"
+            _html += "Please try later back to <a href='/s/products'>shopping</a><hr>"
+            _html += "<p>"+error_message +"</p>"
+
+            document.getElementById('rightside').innerHTML = _html;
+
+        }
+        else{
+            // no Error display form
+            grabCart();
+        }
+      
+    }
+    
+
+    function drawCart(data){
+
+        
+
+        _html = "<table><tr><td></td><td></td><td></td></tr>"
+        
+        _total_price = 0;
+
+        for (i = 0; i < data.length; i++){
+
+            _html += "<tr>"
+            _html += "<td style='padding:10px'><img src='"+data[i].image +"' width=140 height=220></td>"
+            _html += "<td style='padding:10px'>"+data[i].name +"</td>"
+            _html += "<td style='padding:10px'>JPY "+data[i].price+"</td>"
+
+            _html += "</tr>"
+
+            _total_price += parseInt(data[i].price);
+
+        }
+
+        
+        _html +="</table>"
+
+        document.getElementById('total').innerText = _total_price 
+
+        return _html
+    }
+    
+
+
+    </script>
+    
+    <style>
+            .left{
+                width: 50%;
+                float: right;
+            }
+            .right{
+                width: 50%;
+                vertical-align: middle;
+                text-align: center;}
+    </style>
+    
+    
+    
+    </head>
+
+
+<body onload="checkPaymentIntent()">
+
+
+    <div id='cart' class='container' style="display: flex;">
+
+        <div id='items' class='left'></div>
+        <div id='rightside' class='right' style="padding-left:20px">
+
+
+            <h1>Total Price : JPY <span id="total"></span></h1>
+            <br>
+<br>            <br>
+
+            <form id="payment-form">
+                <div id="card-element"><!--Stripe.js injects the Card Element--></div>
+                <button id="submit">
+                  <div class="spinner hidden" id="spinner"></div>
+                  <span id="button-text">Pay</span>
+                </button>
+                <p id="card-error" role="alert"></p>
+                <p class="result-message hidden" style="text-align:left">
+                  Payment succeeded, see the result in your
+                  <a href="" target="_blank">Stripe dashboard.</a> <br>
+                  <span></span>
+                  <br><a href="/s/products" >Go back to top page to retry checkout flow.</a></p>
+                </p>
+              </form>
+
+              <div style="text-align:left">
+              <p>test card number</p>
+            
+              The cards issued by US requres postal code while cards issued in Japan does not require postal. Use below test card numbers to see the difference.
+                <ul>
+                    <li>Visa (US) : 4242424242424242 </li>
+                    <li>Mastercard (US) : 5555555555554444	</li>
+                </ul>
+
+                <ul>
+                    <li>Visa (JP) : 4000003920000003 </li>
+                    <li>JCB (JP) : 3530111333300000	</li>
+                </ul>
+             
+         
+            </div>
+
+        </div>
+
+    </div>
+
+
+    </body>
+    
+    
+    </html>

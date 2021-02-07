@@ -1,0 +1,75 @@
+<html>
+
+<headr>
+<script>
+    function addCart(product_id, price_id, price, currency, name, image){
+
+        console.log("adding item to the card");
+
+        const uri = `/s/add_to_cart`
+
+        data = {
+            "product_id" : product_id, 
+            "price_id": price_id,
+            "price" : price,
+            "currency" : currency,
+            "name" : name,
+            "image" : image
+        }
+              
+            return fetch(uri, {
+                method: "POST",
+                body : JSON.stringify(data)
+            }).then((add) => {
+                alert('Item added to the cart');
+                countCartItems();
+            });
+
+    }
+
+
+    function countCartItems(){
+
+        const uri = `/s/count_cart_items`
+      
+        return fetch(uri, {
+            method: "GET",
+        }).then(no=>{
+            return no.json()
+        }).then(no => {
+            if (no.items == 0){
+                document.getElementById('cart').innerText = 'Your cart is empty';
+            } 
+            else{
+                document.getElementById('cart').innerText = no.items + ' items in your cart';
+            }
+        })
+
+    }
+</script>
+
+
+
+
+
+</head>
+
+<body onload="countCartItems()">
+<h2>Product List | <a id='cart' href="/s/cart">Cart</a></h2>
+
+{% for product in products %}
+<hr>
+<h3> {{product.name}} </h3>
+<img src="{{product.image}}" width=140 height=220></a>
+<p>
+Price: {{product.currency}} {{product.price}} <Br>
+Product ID : {{product.product_id}}     <br>
+{% load static %}
+<img src='{% static 's/add_to_cart.png' %}' width=100 height=30 onclick="addCart('{{product.product_id}}','{{product.price_id}}','{{product.price}}','{{product.currency}}','{{product.name}}','{{product.image}}')">
+
+</p>
+{% endfor %}
+</body>
+
+
+</html>

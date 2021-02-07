@@ -1,0 +1,119 @@
+
+<html>
+
+    <headr>
+    <script>
+
+
+        function grabCart(index){
+    
+
+
+        const uri = `/s/grab_cart`
+            
+            return fetch(uri, {
+                method: "GET",
+            }).then(items=>{
+            return items.json()
+        }).then(items => {
+
+            console.log(items.length)
+            if(items.length > 0){
+                document.getElementById('cart').innerHTML = drawCart(items)
+            }
+            else{
+
+                _html = "There is no items in your cart <br>"
+                _html += "go back to <a href='/s/products'>shopping</a>"
+
+                document.getElementById('empty').innerHTML = _html
+
+            }
+     
+
+            })
+
+            };
+
+    function remove_item(index){
+        
+        const uri = `/s/remove_item`
+            
+            return fetch(uri, {
+                method: "POST",
+                body : JSON.stringify({"index" : index}),
+            }).then(result=>{
+                return result.json()
+            }).then(result=>{
+                console.log(result.message);
+                grabCart();
+            })
+
+
+        };
+
+    
+
+    function drawCart(data){
+
+        
+
+        _html = "<div class='left'><table><tr><td></td><td></td><td></td><td></td></tr>"
+        
+        _total_price = 0;
+
+        for (i = 0; i < data.length; i++){
+
+            _html += "<tr>"
+            _html += "<td style='padding:10px'><img src='"+data[i].image +"' width=140 height=220></td>"
+            _html += "<td style='padding:10px'>"+data[i].name +"</td>"
+            _html += "<td style='padding:10px'>JPY "+data[i].price+"</td>"
+            _html += "<td style='padding:10px'><button type='button' onclick='remove_item("+data[i].index+")'>remove</button></td>"
+            _html += "</tr>"
+
+            _total_price += parseInt(data[i].price);
+
+        }
+
+        _html += "<tr><td></td><td style='padding-top:30px'><b>Total</b></td><td style='padding-top:30px'><b>JPY "+_total_price+"</td><td></td></tr>"
+        
+        _html +="</table></div>"
+
+        _html +="<div class='right'><a href='/s/checkoutstart'><h2>Proceed to Pay</h2></a></div>"
+
+
+        return _html
+    }
+    
+
+    </script>
+    
+    <style>
+            .left{
+                width: 50%;
+                float: right;
+            }
+            .right{
+                width: 50%;
+                vertical-align: middle;
+                text-align: center;}
+    </style>
+    
+    
+    
+    </head>
+
+
+<body onload="grabCart()">
+    <h2><a href="/s/products">Product List</a> | Cart</h2>
+    
+    <div id='empty'>
+
+    <div id='cart' class='container' style="display: flex;">
+    </div>
+
+</div>
+    </body>
+    
+    
+    </html>
